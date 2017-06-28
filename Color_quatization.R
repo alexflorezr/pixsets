@@ -18,19 +18,34 @@ CQ <- function(vimage, n){
         col_vctr
 }
 # heat plots a heatmap with the colors in each outfit
-heat <- function(vA){
-        x <- rep(1:dim(vA)[2], 10)
-        y <- rep(1:dim(vA)[2], each=dim(vA)[1])
-        plot(x,y, pch=15, cex=8, col=vA)
+xheat <- function(vA){
+        ximage <- matrix(1,nrow=dim(vA)[1], ncol=dim(vA)[2])
+        image(ximage, col=as.vector(vA))
 }
 
 # The script
 setwd("~/Desktop/A/Tela/Designers/DVN/SS18_M/Looks_cut/")
 files <- dir()
-looks_df <- matrix(nrow=length(dir()), ncol=10)
+looks_df <- matrix(nrow=length(dir()), ncol=8)
 for(f in seq_along(files)){
         xlook <- readJPEG(files[f])
-        looks_df[f,] <- sort(CQ(xlook, 10))
+        looks_df[f,] <- sort(CQ(xlook, 8))
 }
-heat(looks_df)
+image(looks_df, useRaster = T)
 
+
+# plotting segments
+plot.seg <- function(vA){
+        plot(1,1, type="n", xlim=c(0,dim(vA)[2]), ylim=c(0,dim(vA)[1]))
+        x <- c(0,0,1,1)
+        y <- c(0,1,1,0)
+        for(row in 1:dim(vA)[1]){
+                for(col in 1:dim(vA)[2]){
+                        polygon(x,y, col=vA[row,col], border = NA)
+                        x <- x+1
+                }
+                y <- y +1
+                x <- c(0,0,1,1)
+        }
+}
+plot.seg(looks_df)
